@@ -529,7 +529,7 @@ function renderInicio(){
         </div>
         <button class="btn btn-primary" data-action="iniciar-quiz">Vamos praticar! 💪</button>
         <button class="link-editar" data-action="editar-personalizacao">✏️ Trocar nome</button>
-        <p class="rodape-nota">Material de treino feito em família, sem relação oficial com a SEDUC-SP.</p>
+        <p class="rodape-nota">Feito com carinho para a Maria Eduarda. Sem relação oficial com a SEDUC-SP.</p>
       </div>`;
   }
 
