@@ -1,204 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<title>Treino OLISP para a Fase 2</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Atkinson+Hyperlegible:wght@400;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --paper:#F7F5FB;
-    --paper-alt:#FFFFFF;
-    --ink:#2A2545;
-    --ink-soft:#6B6488;
-    --teal:#256B5E;      --teal-bg:#E4F0EC;
-    --coral:#D95A28;     --coral-bg:#FCE7DC;
-    --violet:#7C4FC9;    --violet-bg:#F0E9FB;
-    --gold:#A66E1E;      --gold-bg:#FBF0DC;
-    --leaf:#2F8C52;      --leaf-bg:#E4F3E7;
-    --accent:#7C4FC9;    --accent-bg:#F0E9FB;
-    --line:#E3DFF0;
-    --radius:18px;
-    --shadow:0 6px 24px rgba(42,37,69,.09);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;overflow-x:hidden;}
-  body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'Atkinson Hyperlegible',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    -webkit-font-smoothing:antialiased;
-    min-height:100vh;
-    line-height:1.6;
-    overflow-wrap:break-word;
-  }
-  .app{max-width:640px;margin:0 auto;padding:28px 20px 76px;}
-  h1,h2{font-family:'Fraunces',Georgia,serif;font-weight:600;color:var(--ink);margin:0 0 14px;line-height:1.25;}
-  h1{font-size:1.7rem;}
-  h2.text-titulo{font-size:1.2rem;margin-bottom:12px;}
-  .eyebrow{
-    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;
-    letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin:0 0 10px;
-  }
-  .lead{font-size:1.05rem;color:var(--ink);margin:0 0 20px;}
-  p{margin:0 0 12px;}
-
-  /* ---------- Transição suave entre telas ---------- */
-  @keyframes entrar{ from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:translateY(0);} }
-  .tela{animation:entrar .35s ease both;}
-  .feedback{animation:entrar .3s ease both;}
-  @media (prefers-reduced-motion:reduce){
-    .tela,.feedback{animation:none;}
-  }
-
-  /* ---------- Botões ---------- */
-  .btn{
-    display:flex;align-items:center;justify-content:center;gap:8px;
-    width:100%;min-height:56px;padding:14px 20px;margin-top:6px;
-    border-radius:14px;border:none;cursor:pointer;text-decoration:none;
-    font-family:'Space Grotesk',sans-serif;font-size:1.02rem;font-weight:600;
-    transition:transform .15s ease;
-  }
-  .btn:active{transform:scale(.98);}
-  .btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
-  .btn-primary{background:var(--ink);color:var(--paper);box-shadow:var(--shadow);}
-  .btn-secondary{background:var(--paper-alt);color:var(--ink);border:2px solid var(--ink);}
-  .btn-whatsapp{background:#25D366;color:#fff;box-shadow:var(--shadow);}
-  .link-editar{background:none;border:none;color:var(--accent);text-decoration:underline;
-    font-family:'Space Grotesk',sans-serif;font-size:.85rem;cursor:pointer;padding:10px 0 0;display:block;}
-
-  /* ---------- Tela inicial ---------- */
-  .info-box{
-    background:var(--paper-alt);border-radius:var(--radius);box-shadow:var(--shadow);
-    padding:18px 20px;margin:18px 0;
-  }
-  .info-box-titulo{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.85rem;
-    letter-spacing:.03em;color:var(--ink-soft);margin-bottom:10px;}
-  .info-lista{list-style:none;margin:0;padding:0;}
-  .info-lista li{padding:5px 0;font-size:1rem;}
-  .rodape-nota{font-size:.78rem;color:var(--ink-soft);margin-top:26px;line-height:1.5;}
-
-  .dicas-compactas{margin:6px 0 22px;}
-  .dicas-titulo{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.85rem;color:var(--ink-soft);margin-bottom:10px;}
-  .dicas-lista-compacta{list-style:none;margin:0;padding:0;background:var(--paper-alt);
-    border-radius:var(--radius);box-shadow:var(--shadow);}
-  .dicas-lista-compacta li{padding:11px 16px;font-size:.94rem;border-bottom:1px solid var(--line);}
-  .dicas-lista-compacta li:last-child{border-bottom:none;}
-
-  .ultimo-resultado{
-    display:flex;justify-content:space-between;align-items:center;
-    background:var(--paper-alt);border-radius:14px;box-shadow:var(--shadow);
-    padding:14px 18px;margin:16px 0 22px;
-  }
-  .ultimo-label{font-family:'Space Grotesk',sans-serif;font-size:.82rem;color:var(--ink-soft);}
-  .ultimo-valor{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--accent);}
-
-  /* ---------- Tela de personalização ---------- */
-  .input-nome{
-    width:100%;font-family:'Atkinson Hyperlegible',sans-serif;font-size:1.1rem;
-    padding:14px 16px;border-radius:14px;border:2px solid var(--line);
-    background:var(--paper-alt);color:var(--ink);margin:6px 0 8px;
-  }
-  .input-nome:focus{outline:none;border-color:var(--accent);}
-
-  /* ---------- Tela de dicas (revisão opcional) ---------- */
-  .lista-dicas{margin:18px 0 26px;}
-  .dica-item{
-    display:flex;gap:14px;align-items:flex-start;
-    background:var(--paper-alt);border-radius:14px;box-shadow:var(--shadow);
-    padding:14px 16px;margin-bottom:10px;
-  }
-  .dica-icone{font-size:1.3rem;flex-shrink:0;line-height:1.4;}
-  .dica-texto{font-size:.96rem;}
-
-  /* ---------- Progresso ---------- */
-  .progress-wrap{margin-bottom:22px;}
-  .progress-track{height:8px;background:var(--line);border-radius:4px;overflow:hidden;}
-  .progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s ease;}
-  .progress-label{font-family:'Space Grotesk',sans-serif;font-size:.82rem;
-    color:var(--ink-soft);margin-top:7px;}
-
-  /* ---------- Cartão de texto (varia por gênero) ---------- */
-  .text-card{
-    background:var(--paper-alt);border-radius:var(--radius);padding:22px 22px 18px;
-    box-shadow:var(--shadow);margin-bottom:18px;
-  }
-  .kicker{
-    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.74rem;
-    letter-spacing:.1em;margin:0 0 10px;
-  }
-  .text-corpo p{font-size:.98rem;margin-bottom:10px;}
-  .text-corpo p:last-child{margin-bottom:0;}
-
-  .text-card.genero-noticia{border-top:6px solid var(--teal);}
-  .text-card.genero-noticia .kicker{color:var(--teal);}
-
-  .text-card.genero-anuncio{
-    background:var(--coral-bg);border:2px dashed var(--coral);
-  }
-  .text-card.genero-anuncio .kicker{color:var(--coral);}
-  .text-card.genero-anuncio .text-titulo{color:var(--coral);}
-
-  .text-card.genero-fabula{
-    background:var(--violet-bg);border-radius:26px 10px 26px 10px;
-  }
-  .text-card.genero-fabula .kicker{color:var(--violet);}
-  .text-card.genero-fabula .fala{color:var(--violet);font-style:italic;}
-
-  /* ---------- Pergunta e opções ---------- */
-  .pergunta-box{margin-bottom:10px;}
-  .pergunta-enunciado{font-size:1.05rem;font-weight:700;margin-bottom:16px;}
-  .opcoes{display:flex;flex-direction:column;}
-  .opcao{
-    display:flex;align-items:center;gap:13px;width:100%;text-align:left;
-    padding:14px 16px;margin-bottom:11px;border-radius:14px;border:2px solid var(--line);
-    background:var(--paper-alt);font-family:'Atkinson Hyperlegible',sans-serif;
-    font-size:.98rem;line-height:1.45;cursor:pointer;transition:all .15s ease;
-  }
-  .opcao:hover:not(:disabled){border-color:var(--accent);}
-  .opcao:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
-  .opcao .letra{
-    font-family:'Space Grotesk',sans-serif;font-weight:700;flex-shrink:0;
-    width:30px;height:30px;border-radius:50%;background:var(--accent-bg);color:var(--accent);
-    display:flex;align-items:center;justify-content:center;font-size:.86rem;
-  }
-  .opcao:disabled{cursor:default;}
-  .opcao.correta{background:var(--leaf-bg);border-color:var(--leaf);}
-  .opcao.correta .letra{background:var(--leaf);color:#fff;}
-  .opcao.incorreta-selecionada{background:var(--gold-bg);border-color:var(--gold);}
-  .opcao.incorreta-selecionada .letra{background:var(--gold);color:#fff;}
-  .opcao.neutra{opacity:.55;}
-
-  .feedback{margin:6px 0 16px;padding:15px 17px;border-radius:14px;font-size:.94rem;}
-  .feedback.ok{background:var(--leaf-bg);border-left:4px solid var(--leaf);}
-  .feedback.tente{background:var(--gold-bg);border-left:4px solid var(--gold);}
-
-  /* ---------- Resultado ---------- */
-  .genero-breakdown{
-    background:var(--paper-alt);border-radius:var(--radius);box-shadow:var(--shadow);
-    padding:16px 20px;margin:18px 0;
-  }
-  .genero-item{display:flex;justify-content:space-between;padding:6px 0;font-size:.98rem;}
-  .genero-item strong{font-family:'Space Grotesk',sans-serif;}
-  .tempo-total{color:var(--ink-soft);font-size:.9rem;}
-  .historico-box{
-    background:var(--paper-alt);border-radius:14px;padding:14px 18px;margin:16px 0;
-    border:1px dashed var(--line);
-  }
-  .historico-titulo{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.82rem;
-    color:var(--ink-soft);margin-bottom:6px;}
-  .historico-item{font-size:.88rem;color:var(--ink-soft);margin:0;}
-  .acoes{margin-top:22px;display:flex;flex-direction:column;gap:10px;}
-  .copiar-msg{font-size:.82rem;color:var(--leaf);text-align:center;margin-top:-2px;min-height:1.2em;}
-</style>
-</head>
-<body>
-<div id="app" class="app"></div>
-
-<script>
 /* =====================================================================
    CONFIGURAÇÃO OPCIONAL: sincronizar o histórico com o Supabase.
    Deixe as duas constantes em branco para usar só o histórico salvo no
@@ -226,8 +25,8 @@ const BANCO = {
           errado:'Repara de novo: o texto conta algo que aconteceu de verdade, cita uma fonte (a diretora) e traz data e local. Essas pistas indicam notícia.' },
         { enunciado:'Qual é o principal objetivo desse texto?',
           opcoes:['Informar a comunidade sobre uma ação que a escola realizou','Vender mudas de árvores para a prefeitura','Convencer os alunos a estudar mais sobre plantas','Contar uma história inventada sobre uma escola'], correta:0,
-          certo:'Exatamente. O texto está ali só pra informar, contando o que aconteceu, quem organizou e por quê, sem tentar vender nada nem convencer ninguém.',
-          errado:'Repara que o texto não tenta vender nem convencer ninguém, só conta o que aconteceu. Esse é o objetivo de informar.' },
+          certo:'Exatamente. Repara na diferença: o mutirão em si tinha o objetivo de conscientizar sobre o meio ambiente, mas o texto que conta isso está só relatando o que já aconteceu, sem pedir nada pro leitor. Por isso o objetivo do texto é informar.',
+          errado:'Repara que o texto conta uma ação que já aconteceu, sem pedir nada pro leitor fazer agora. Mesmo o mutirão tendo um propósito ambiental, o texto que relata isso só informa, não convence.' },
         { enunciado:'De acordo com o texto, quantas mudas de árvores foram plantadas?',
           opcoes:['40','4','14','400'], correta:0,
           certo:'Isso! O texto fala direitinho: "foram plantadas 40 mudas". Boa atenção aos números.',
@@ -296,8 +95,8 @@ const BANCO = {
           errado:'Repara que o texto conta algo que aconteceu de verdade e cita uma fonte (a bibliotecária). Isso é característica de notícia.' },
         { enunciado:'Qual é o principal objetivo desse texto?',
           opcoes:['Informar sobre o resultado de uma gincana','Convencer os alunos a lerem mais','Ensinar como resenhar um livro','Anunciar a venda de livros de aventura'], correta:0,
-          certo:'Exatamente. O texto só conta o resultado da gincana, sem tentar convencer ninguém de nada.',
-          errado:'Repara que o texto não tenta convencer nem vender nada, só informa o resultado. Esse é o objetivo de informar.' },
+          certo:'Exatamente. A gincana em si foi pensada pra incentivar a leitura, mas o texto que conta o resultado dela só relata o que aconteceu, sem pedir nada pro leitor. Por isso o objetivo do texto é informar.',
+          errado:'Repara que o texto conta um resultado que já aconteceu, sem pedir nada pro leitor fazer agora. Mesmo a gincana tendo o propósito de incentivar a leitura, o texto que relata isso só informa, não convence.' },
         { enunciado:'De acordo com o texto, quantos livros foram emprestados durante o mês?',
           opcoes:['540','54','450','504'], correta:0,
           certo:'Boa! O texto diz: "540 livros emprestados". Ótima atenção ao número.',
@@ -912,6 +711,3 @@ function iniciarApp(){
   render();
 }
 iniciarApp();
-</script>
-</body>
-</html>
