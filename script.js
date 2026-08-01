@@ -428,6 +428,48 @@ function mensagemPorDesempenho(acertos,total){
 function textoCompartilhar(acertos,total){
   return 'Terminei um treino da OLISP! 🎉 Acertei ' + acertos + ' de ' + total + ' questões. Bora treinar o próximo comigo?';
 }
+function renderCartaoShare(nome, acertos, total, porGenero, msg){
+  const breakdownHtml = Object.entries(porGenero).map(([g,v])=>`
+    <div class="cartao-share-item"><span>${GEN_LABEL[g]||g}</span><strong>${v.acertos}/${v.total}</strong></div>
+  `).join('');
+  return `
+    <div id="cartao-share" class="cartao-share">
+      <p class="cartao-share-eyebrow">Treino OLISP</p>
+      <p class="cartao-share-emoji">${msg.emoji}</p>
+      <h1 class="cartao-share-titulo">Acertei ${acertos} de ${total}!</h1>
+      <p class="cartao-share-nome">${escapeHtml(nome)}</p>
+      <div class="cartao-share-breakdown">${breakdownHtml}</div>
+      <p class="cartao-share-rodape">Treino de leitura · Fase 2 da OLISP</p>
+    </div>`;
+}
+async function compartilharImagem(){
+  const {acertos, total, porGenero} = calcularResultado();
+  const cartaoEl = document.getElementById('cartao-share');
+  const statusEl = document.getElementById('compartilhar-status');
+  if(typeof html2canvas === 'undefined' || !cartaoEl){
+    if(statusEl) statusEl.textContent = 'Não foi possível gerar a imagem agora.';
+    return;
+  }
+  if(statusEl) statusEl.textContent = 'Gerando imagem...';
+  try{
+    const canvas = await html2canvas(cartaoEl, { backgroundColor:'#F7F5FB', scale:2 });
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    const arquivo = new File([blob], 'treino-olisp.png', { type:'image/png' });
+    if(navigator.canShare && navigator.canShare({ files:[arquivo] })){
+      if(statusEl) statusEl.textContent = '';
+      await navigator.share({ files:[arquivo], title:'Treino OLISP', text: textoCompartilhar(acertos,total) });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'treino-olisp.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      if(statusEl) statusEl.textContent = 'Imagem salva! Agora é só anexar no app que preferir.';
+    }
+  }catch(e){
+    if(statusEl) statusEl.textContent = (e && e.name === 'AbortError') ? '' : 'Não foi possível compartilhar a imagem agora.';
+  }
+}
 
 function montarPerguntasDoTexto(texto, textoIndex){
   return texto.perguntas.map(p => {
@@ -590,6 +632,7 @@ function renderResults(){
     </div>` : '';
 
   const shareText = encodeURIComponent(textoCompartilhar(acertos,total));
+  const nome = lerNome() || 'Campeã';
 
   return `
     <div class="tela">
@@ -602,12 +645,15 @@ function renderResults(){
       ${historicoHtml}
 
       <div class="acoes">
-        <a class="btn btn-whatsapp" href="https://api.whatsapp.com/send?text=${shareText}" target="_blank" rel="noopener">📤 Compartilhar com seu tio</a>
+        <button class="btn btn-primary" data-action="compartilhar-imagem">📤 Compartilhar resultado</button>
+        <p class="copiar-msg" id="compartilhar-status"></p>
         <button class="btn btn-secondary" data-action="copiar">📋 Copiar resultado</button>
         <p class="copiar-msg" id="copiar-msg"></p>
         <button class="btn btn-secondary" data-action="reiniciar">🔄 Fazer outro treino</button>
         <button class="link-editar" data-action="ir-dicas" style="text-align:center">🧠 Rever as dicas antes do próximo</button>
       </div>
+
+      ${renderCartaoShare(nome, acertos, total, porGenero, msg)}
     </div>`;
 }
 
@@ -673,6 +719,9 @@ app.addEventListener('click', (e)=>{
     const nomeFinal = (state.nomeTemp || '').trim() || 'Campeã';
     salvarNome(nomeFinal);
     state.screen = 'inicio';
+  } else if(action==='compartilhar-imagem'){
+    compartilharImagem();
+    return;
   } else if(action==='copiar'){
     const {acertos,total} = calcularResultado();
     const txt = textoCompartilhar(acertos,total);

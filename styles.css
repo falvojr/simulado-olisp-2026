@@ -53,7 +53,6 @@
   .btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
   .btn-primary{background:var(--ink);color:var(--paper);box-shadow:var(--shadow);}
   .btn-secondary{background:var(--paper-alt);color:var(--ink);border:2px solid var(--ink);}
-  .btn-whatsapp{background:#25D366;color:#fff;box-shadow:var(--shadow);}
   .link-editar{background:none;border:none;color:var(--accent);text-decoration:underline;
     font-family:'Space Grotesk',sans-serif;font-size:.85rem;cursor:pointer;padding:10px 0 0;display:block;}
 
@@ -173,3 +172,13 @@
   .historico-item{font-size:.88rem;color:var(--ink-soft);margin:0;}
   .acoes{margin-top:22px;display:flex;flex-direction:column;gap:10px;}
   .copiar-msg{font-size:.82rem;color:var(--leaf);text-align:center;margin-top:-2px;min-height:1.2em;}
+
+  .cartao-share{position:fixed;top:0;left:-9999px;width:640px;padding:64px 56px;background:#F7F5FB;font-family:'Atkinson Hyperlegible',sans-serif;}
+  .cartao-share-eyebrow{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:3px;text-transform:uppercase;color:#7C4FC9;margin:0 0 28px;}
+  .cartao-share-emoji{font-size:72px;margin:0 0 20px;}
+  .cartao-share-titulo{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:44px;color:#2A2545;margin:0 0 8px;line-height:1.2;}
+  .cartao-share-nome{font-size:20px;color:#6B6488;margin:0 0 36px;}
+  .cartao-share-breakdown{background:#FFFFFF;border-radius:20px;padding:8px 28px;margin-bottom:36px;}
+  .cartao-share-item{display:flex;justify-content:space-between;padding:14px 0;font-size:20px;color:#2A2545;border-bottom:1px solid #E3DFF0;}
+  .cartao-share-item:last-child{border-bottom:none;}
+  .cartao-share-rodape{font-family:'Space Grotesk',sans-serif;font-size:15px;color:#6B6488;letter-spacing:.5px;margin:0;}
