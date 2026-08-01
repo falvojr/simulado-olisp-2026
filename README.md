@@ -41,6 +41,6 @@ create policy "permite inserir"
 
 Sem política de leitura pro `anon` de propósito: a página consegue gravar, mas ninguém que só tenha o link consegue ler pela API. Pra ver os dados, é só abrir o Table Editor do projeto, autenticado.
 
-2. Pega a URL e a chave anon em Project Settings → API.
-3. Cola as duas nas constantes `SUPABASE_URL` e `SUPABASE_ANON_KEY`, no início do `script.js`.
+2. Na aba **Publishable and secret API keys** (não a "Legacy"), pega a URL do projeto e a **Publishable key** (prefixo `sb_publishable_...`). É o substituto atual da antiga chave anon, mesmo nível de acesso, mesma política de RLS.
+3. Cola as duas nas constantes `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`, no início do `script.js`.
 

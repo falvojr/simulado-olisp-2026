@@ -1,13 +1,7 @@
-/* =====================================================================
-   CONFIGURAÇÃO OPCIONAL: sincronizar o histórico com o Supabase.
-   Deixe as duas constantes em branco para usar só o histórico salvo no
-   navegador (funciona sem nenhuma configuração). Instruções de setup
-   (SQL da tabela + política de RLS) na mensagem que acompanha este arquivo.
-===================================================================== */
-const SUPABASE_URL = '';
-const SUPABASE_ANON_KEY = '';
+// Config opcional: preencha para sincronizar o histórico com o Supabase (setup no README)
+const SUPABASE_URL = 'https://fsiitdyznwylnaqzvalv.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ZypJKb0ESooq5A39U4a4LA_ovPChmLM';
 
-/* ============ BANCO DE TEXTOS (2 versões por gênero) ============ */
 const BANCO = {
   noticia: [
     {
@@ -324,7 +318,7 @@ const BANCO = {
   ]
 };
 
-/* Versão curta, pra tela inicial (leitura rápida) */
+// Versão curta: tela inicial, leitura rápida
 const DICAS_CURTAS = [
   '🔍 Descubra o tipo de texto antes de tudo',
   '🤫 Leia com atenção total, sem pressa',
@@ -334,7 +328,7 @@ const DICAS_CURTAS = [
   '🎯 O texto quer informar, convencer ou contar uma história?'
 ];
 
-/* Versão completa, pra tela de revisão opcional */
+// Versão completa: tela de revisão opcional, mais elaborada
 const DICAS = [
   { icone:'🔍', texto:'Primeiro, tenta descobrir que tipo de texto é aquele. É uma notícia? Um anúncio? Uma história? Saber isso já ajuda a entender o que esperar dele.' },
   { icone:'🤫', texto:'Lê com atenção total. Desliga as notificações um pouco e foca só naquele texto, sem pressa nenhuma.' },
@@ -346,7 +340,6 @@ const DICAS = [
 
 const GEN_LABEL = { noticia:'📰 Notícia', anuncio:'📣 Anúncio', fabula:'📖 Fábula' };
 
-/* ============ ESTADO ============ */
 const state = {
   screen:'inicio',
   current:0,
@@ -359,19 +352,18 @@ const state = {
   nomeTemp:''
 };
 
-/* ============ ARMAZENAMENTO LOCAL ============ */
 const HIST_KEY = 'olisp_treino_historico_v1';
 const NOME_KEY = 'olisp_nome';
 
 async function sincronizarSupabase(registro){
-  if(!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+  if(!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) return;
   try{
     await fetch(SUPABASE_URL + '/rest/v1/tentativas', {
       method:'POST',
+      // chaves sb_publishable_ não são JWT; só o header apikey, Authorization é rejeitado
       headers:{
         'Content-Type':'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization':'Bearer ' + SUPABASE_ANON_KEY,
+        'apikey': SUPABASE_PUBLISHABLE_KEY,
         'Prefer':'return=minimal'
       },
       body: JSON.stringify({
@@ -382,14 +374,14 @@ async function sincronizarSupabase(registro){
         por_genero: registro.porGenero
       })
     });
-  }catch(e){ /* falha silenciosa, não interrompe a experiência dela */ }
+  }catch(e){ /* falha silenciosa: sincronização é bônus, não pode travar o treino */ }
 }
 function salvarHistorico(registro){
   try{
     const atual = JSON.parse(localStorage.getItem(HIST_KEY) || '[]');
     atual.push(registro);
     localStorage.setItem(HIST_KEY, JSON.stringify(atual));
-  }catch(e){ /* segue sem quebrar se o navegador bloquear armazenamento local */ }
+  }catch(e){ /* navegador pode bloquear localStorage; segue sem quebrar o treino */ }
   sincronizarSupabase(registro);
 }
 function lerHistorico(){
@@ -399,7 +391,6 @@ function lerHistorico(){
 function lerNome(){ try{ return localStorage.getItem(NOME_KEY) || ''; }catch(e){ return ''; } }
 function salvarNome(n){ try{ localStorage.setItem(NOME_KEY, n); }catch(e){} }
 
-/* ============ HELPERS ============ */
 function escapeHtml(str){
   return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -438,7 +429,6 @@ function textoCompartilhar(acertos,total){
   return 'Terminei um treino da OLISP! 🎉 Acertei ' + acertos + ' de ' + total + ' questões. Bora treinar o próximo comigo?';
 }
 
-/* ============ MONTAGEM DINÂMICA DO SIMULADO ============ */
 function montarPerguntasDoTexto(texto, textoIndex){
   return texto.perguntas.map(p => {
     const ordem = embaralhar([0,1,2,3]);
@@ -458,7 +448,6 @@ function novoSimulado(){
   state.perguntas = textosEscolhidos.flatMap((t,i) => montarPerguntasDoTexto(t,i));
 }
 
-/* ============ RENDER ============ */
 const app = document.getElementById('app');
 
 function renderPersonalizar(){
@@ -631,7 +620,6 @@ function render(){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-/* ============ EVENTOS ============ */
 app.addEventListener('input', (e)=>{
   if(e.target.id === 'input-nome') state.nomeTemp = e.target.value;
 });
@@ -699,7 +687,6 @@ app.addEventListener('click', (e)=>{
   render();
 });
 
-/* ============ INÍCIO ============ */
 function iniciarApp(){
   const nomeSalvo = lerNome();
   if(!nomeSalvo){
